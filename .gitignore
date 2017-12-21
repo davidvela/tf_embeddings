@@ -24,7 +24,10 @@ assignments/chatbot/processed/*
 
 
 
-
+#In three steps, you can clean up your repository and make sure your ignored items are indeed ignored:
+#$ git rm -r --cached .
+#$ git add .
+#$ git commit -m "Clean up ignored files"
 
 
 # NODEJS
