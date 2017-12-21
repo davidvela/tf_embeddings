@@ -29,6 +29,8 @@ assignments/chatbot/processed/*
 #$ git add .
 #$ git commit -m "Clean up ignored files"
 
+git rm -r ./data
+
 
 # NODEJS
 
