@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-
+# SVD = Singular Value Decomposition 
 def inference_svd(user_batch, item_batch, user_num, item_num, dim=5, device="/cpu:0"):
     with tf.device("/cpu:0"):
         bias_global = tf.get_variable("bias_global", shape=[])
