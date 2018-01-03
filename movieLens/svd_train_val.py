@@ -50,22 +50,15 @@ def svd(train, test,length,moviefile, trainFl=False):
 	print (len(moviefile))
 	samples_per_batch = len(train) // BATCH_SIZE
 
-	iter_train = dataio.ShuffleIterator([train["user"],
-                                         train["item"],
-                                        train["rate"]],
-                                        batch_size=BATCH_SIZE)
+	iter_train = dataio.ShuffleIterator([train["user"], train["item"], train["rate"]],  batch_size=BATCH_SIZE)
 
-	iter_test = dataio.OneEpochIterator([test["user"],
-                                         test["item"],
-                                        test["rate"]],
-                                        batch_size=-1)
+	iter_test = dataio.OneEpochIterator([test["user"], test["item"], test["rate"]],   batch_size=-1)
 
 	user_batch = tf.placeholder(tf.int32, shape=[None], name="id_user")
 	item_batch = tf.placeholder(tf.int32, shape=[None], name="id_item")
 	rate_batch = tf.placeholder(tf.float32, shape=[None])
 
-	infer, regularizer = ops.inference_svd(user_batch, item_batch, user_num=USER_NUM, item_num=ITEM_NUM, dim=DIM,
-                                           device=DEVICE)
+	infer, regularizer = ops.inference_svd(user_batch, item_batch, user_num=USER_NUM, item_num=ITEM_NUM, dim=DIM, device=DEVICE)
 	global_step = tf.contrib.framework.get_or_create_global_step()
 	_, train_op = ops.optimization(infer, regularizer, rate_batch, learning_rate=0.001, reg=0.05, device=DEVICE)
 	#zeros= tf.Variable(tf.zeros([1]),name="zeros")
@@ -82,9 +75,7 @@ def svd(train, test,length,moviefile, trainFl=False):
 		if trainFl == True: 
 			for i in range(EPOCH_MAX * samples_per_batch):
 				users, items, rates = next(iter_train)
-				_, pred_batch = sess.run([train_op, infer], feed_dict={user_batch: users,
-																	item_batch: items,
-																														rate_batch: rates})
+				_, pred_batch = sess.run([train_op, infer], feed_dict={user_batch: users, item_batch: items,rate_batch: rates})
 				pred_batch = clip(pred_batch)
 				errors.append(np.power(pred_batch - rates, 2))
 				if i % samples_per_batch == 0:
@@ -97,8 +88,7 @@ def svd(train, test,length,moviefile, trainFl=False):
 						test_err2 = np.append(test_err2, np.power(pred_batch - rates, 2))
 					end = time.time()
 					test_err = np.sqrt(np.mean(test_err2))
-					print("{:3d} {:f} {:f} {:f}(s)".format(i // samples_per_batch, train_err, test_err,
-														end - start))
+					print("{:3d} {:f} {:f} {:f}(s)".format(i // samples_per_batch, train_err, test_err, end - start))
 					train_err_summary = make_scalar_summary("training_error", train_err)
 					test_err_summary = make_scalar_summary("test_error", test_err)
 					summary_writer.add_summary(train_err_summary, i)
