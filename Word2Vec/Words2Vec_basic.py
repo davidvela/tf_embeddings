@@ -83,8 +83,7 @@ def build_dataset(words, n_words):
   reversed_dictionary = dict(zip(dictionary.values(), dictionary.keys()))
   return data, count, dictionary, reversed_dictionary
 
-data, count, dictionary, reverse_dictionary = build_dataset(vocabulary,
-                                                            vocabulary_size)
+data, count, dictionary, reverse_dictionary = build_dataset(vocabulary, vocabulary_size)
 del vocabulary  # Hint to reduce memory.
 print('Most common words (+UNK)', count[:5])
 print('Sample data', data[:10], [reverse_dictionary[i] for i in data[:10]])
@@ -160,9 +159,7 @@ with graph.as_default():
     embed = tf.nn.embedding_lookup(embeddings, train_inputs)
 
     # Construct the variables for the NCE loss
-    nce_weights = tf.Variable(
-        tf.truncated_normal([vocabulary_size, embedding_size],
-                            stddev=1.0 / math.sqrt(embedding_size)))
+    nce_weights = tf.Variable( tf.truncated_normal([vocabulary_size, embedding_size], stddev=1.0 / math.sqrt(embedding_size)))
     nce_biases = tf.Variable(tf.zeros([vocabulary_size]))
 
   # Compute the average NCE loss for the batch.
