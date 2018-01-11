@@ -6,7 +6,7 @@ import numpy as np
 from PIL import Image
 from tensorflow.contrib.tensorboard.plugins import projector
 
-LOG = "./tmp/logs"
+LOG = "./tmp/logs/"
 
 # vertices of a cube in 3 dimensions x, y, z 
 def load_data():
@@ -39,8 +39,8 @@ def define_embedding( embedding_variable, dimmensions):
     config = projector.ProjectorConfig()
     embedding = config.embeddings.add()
     embedding.tensor_name = embedding_variable.name
-    embedding.metadata_path = LOG + '/metadata.tsv'
-    embedding.sprite.image_path = LOG + '/sprites.png'
+    embedding.metadata_path = LOG + 'metadata.tsv'
+    embedding.sprite.image_path = LOG + 'sprites.png'
     embedding.sprite.single_image_dim.extend(dimmensions)
     projector.visualize_embeddings(summary_writer, config)
     return embedding
@@ -74,8 +74,8 @@ def create_sprites(dimensions):
     sprites[1] = Image.fromarray(np.uint8(sprites[1]) * 0xFF)
     sprites[0] = sprites[0].resize(dimensions, Image.NEAREST)
     sprites[1] = sprites[1].resize(dimensions, Image.NEAREST)
-    sprites[0].save( LOG + '/sprite0.png')
-    sprites[1].save( LOG + '/sprite1.png')
+    sprites[0].save( LOG + 'sprite0.png')
+    sprites[1].save( LOG + 'sprite1.png')
     return sprites
 
 def main():
@@ -91,7 +91,7 @@ def main():
     session = tf.InteractiveSession()
     # with tf.Session() as session:
     session.run(tf.global_variables_initializer())
-    saver.save(session, LOG + '/model.ckpt', 0)
+    saver.save(session, LOG + 'model.ckpt', 0)
     
     sprites = create_sprites(dimensions)
     merge_sprites(labels, embedding, single, sprites)            
