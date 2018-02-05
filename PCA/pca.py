@@ -23,7 +23,7 @@ def mainRun2():
     plt.imshow(QTQ)
     plt.show()
 
-    print np.around(QTQ, decimals=2)
+    print( np.around(QTQ, decimals=2))
 
 
 if __name__ == '__main__':
