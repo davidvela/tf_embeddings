@@ -137,13 +137,16 @@ def test5_ms3(): # check model size
         c.append(tf.matmul(a, b))
         s = tf.add_n(c)
         s1 = tf.add_n(c)
-
+    
+    start = time.time()    
     with tf.Session(config=tf_config) as sess:
         for i in range(epochs):
             r1 = sess.run([s,s1])
             r2 = sess.run([d,d1])
             if i % dis == 0 : print(i)
         print(r1)
+    calc_time(start)
+    
     # Creates a session with log_device_placement set to True.
     sess = tf.Session(config= tf_config)
 
@@ -151,18 +154,23 @@ def test5_ms3(): # check model size
     print(sess.run(s))
     print("Model Size")
 
+def calc_time(start):
+    print(datetime.now().strftime('%H:%M:%S'))
+    elapsed_time = float(time.time() - start)
+    print("loop - {} - time:{}" .format( epochs, elapsed_time ))
+
 # main    
 if __name__ == '__main__':
+    print(datetime.now().strftime('%H:%M:%S'))
+
     epochs = 100
     dis = epochs/5
-    start = time.time()
-    print(datetime.now().strftime('%H:%M:%S'))
+
+    start = time.time()    
     
     # test1_dp()
     # test2_mp()
     # test4_mg()
     test5_ms3()
 
-    print(datetime.now().strftime('%H:%M:%S'))
-    elapsed_time = float(time.time() - start)
-    print("loop - {} - time:{}" .format( epochs, elapsed_time ))
+    calc_time(start)
