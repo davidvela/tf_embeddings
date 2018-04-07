@@ -217,16 +217,30 @@ def create_excel( file ):
             
             geo.append(js)
 
-        # dfs = pd.read_excel(path + 'test2.xlsx') #***
-
         df = pd.DataFrame({'Date': date, 'Time': time, 's_ip': s_ip,'cs_method':cs_method,'cs_uri_stem': cs_uri_stem, 'cs_uri_query': cs_uri_query,'s_port': s_port,'cs_username': cs_username,'c_ip': c_ip,'cs_User_Agent': cs_User_Agent, 'cs_Cookie': '-' , 'cs_Referer': '-', 'sc_status': sc_status,'sc_substatus': sc_substatus,'sc_win32': sc_win32, 'sc_bytes': '-','cs_bytes': '-' ,'time_taken': time_taken ,
-                       'pc': pc, 'city' : city, 'state_area' : area, 'country': country
-         })
-    ##df = DataFrame({'Date': date, 'Time': time, 's_ip': s_ip, 'cs_method': cs_method,'cs_uri_stem': cs_uri_stem, 'cs_uri_query': cs_uri_query, 's_port': s_port ,'cs_username': cs_username, 'c_ip': c_ip,'cs_User_Agent': cs_User_Agent,'sc_status': sc_status, 'sc_substatus': sc_substatus, 'sc_win32': sc_win32, 'time_taken': time_taken})     
-        
-        # df = [ dfs, df ]  #***
-        
-        df.to_excel( path + 'test2.xlsx', sheet_name='sheet1', index=False)
+                        'pc': pc, 'city' : city, 'state_area' : area, 'country': country
+            })
+        ##df = DataFrame({'Date': date, 'Time': time, 's_ip': s_ip, 'cs_method': cs_method,'cs_uri_stem': cs_uri_stem, 'cs_uri_query': cs_uri_query, 's_port': s_port ,'cs_username': cs_username, 'c_ip': c_ip,'cs_User_Agent': cs_User_Agent,'sc_status': sc_status, 'sc_substatus': sc_substatus, 'sc_win32': sc_win32, 'time_taken': time_taken})         
+
+        robots = df[ df["cs_uri_stem"] == '/robots.txt' ]
+        arob = []
+        for robot in robots.values:
+            arob.append(robot[2] )
+
+        def check(x): 
+            if x in arob: return "X"
+            return ""
+
+        df['crowler'] = df['c_ip'].map(lambda x: check( x ))
+
+        if os.path.isfile(path + 'test2.xlsx'):
+            dfs = pd.read_excel(path + 'test2.xlsx', sheet_name='sheet1', index=False)      
+            frames = [df, dfs]
+            result1 = pd.concat(frames)
+        else:
+            result1 = df
+
+        result1.to_excel( path + 'test2.xlsx', sheet_name='sheet1', index=False)
         
     else:
         a = range(len(cadena1))
@@ -377,14 +391,34 @@ def create_excel( file ):
             geo.append(js)
 
         # read current excel in pandas. 
-            
         df = pd.DataFrame({'Date': date, 'Time': time, 's_ip': s_ip,'cs_method':cs_method,'cs_uri_stem': cs_uri_stem, 'cs_uri_query': cs_uri_query,'s_port': s_port,'cs_username': cs_username,'c_ip': c_ip,'cs_User_Agent': cs_User_Agent, 'cs_cookie': cs_cookie , 'cs_referer': cs_referer, 'sc_status': sc_status,'sc_substatus': sc_substatus,'sc_win32': sc_win32, 'sc_bytes': sc_bytes,'cs_bytes': cs_bytes ,'time_taken': time_taken,
                             'pc': pc, 'city' : city, 'state_area' : area, 'country': country
          })
         ##df = DataFrame({'Date': date, 'Time': time, 's_ip': s_ip, 'cs_method': cs_method,'cs_uri_stem': cs_uri_stem, 'cs_uri_query': cs_uri_query, 's_port': s_port ,'cs_username': cs_username, 'c_ip': c_ip,'cs_User_Agent': cs_User_Agent,'sc_status': sc_status, 'sc_substatus': sc_substatus, 'sc_win32': sc_win32, 'time_taken': time_taken})     
+        robots = df[ df["cs_uri_stem"] == '/robots.txt' ]
+        arob = []
+        for robot in robots.values:
+            arob.append(robot[2] )
+
+        def check(x): 
+            if x in arob: return "X"
+            return ""
+
+        df['crowler'] = df['c_ip'].map(lambda x: check( x ))
+
+        if os.path.isfile(path + 'test3.xlsx'):
+            dfs = pd.read_excel(path + 'test3.xlsx', sheet_name='sheet1', index=False)      
+            frames = [df, dfs]
+            result2 = pd.concat(frames)
+        else:
+            result2 = df
+
+        result2 = pd.concat(frames)
+
+
+
         
-        
-        df.to_excel(path + 'test3.xlsx', sheet_name='sheet1', index=False)
+        result2.to_excel(path + 'test3.xlsx', sheet_name='sheet1', index=False)
         
         #date time s-ip cs-method cs-uri-stem cs-uri-query s-port cs-username c-ip cs(User-Agent) cs(Cookie) cs(Referer) sc-status sc-substatus sc-win32-status sc-bytes cs-bytes time-taken
         #date time s-ip cs-method cs-uri-stem cs-uri-query s-port cs-username c-ip cs(User-Agent) sc-status sc-substatus sc-win32-status time-taken  
@@ -399,6 +433,8 @@ if __name__ == '__main__':
 	
 	for file in files: 
 		create_excel(file)
-
+    
+    # 
+    # print("end")
 
 		
