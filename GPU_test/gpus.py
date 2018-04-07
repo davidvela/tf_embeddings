@@ -109,7 +109,6 @@ def test5_ms2(): # check model size
     print(sess.run(sum))
     print("Model Size")
 
-
 def test5_ms3(): # check model size
     # Creates a graph.
     tf_config = tf.ConfigProto(allow_soft_placement=True) #,log_device_placement=True)
