@@ -12,6 +12,7 @@ import requests
 
 import os
 path = '../../_data_tmp/W3SVC2/'
+fgeo = False
 
 def old(): 
     #!/usr/bin/env python3
@@ -203,19 +204,22 @@ def create_excel( file ):
     #date = [cadena1[b]]
        # geolocalizacion
         pc = []; city = []; area = []; country = []
-        geo = []
-        for i in c_ip:
-            ip = i
-            url = 'http://freegeoip.net/json/'+ip
-            r = requests.get(url)
-            js = r.json()   
-            
-            city.append(js["city"])
-            pc.append(js["zip_code"])
-            area.append(js["region_name"])
-            country.append(js["country_name"])
-            
-            geo.append(js)
+        if fgeo: 
+            geo = []
+            for i in c_ip:
+                ip = i
+                url = 'http://freegeoip.net/json/'+ip
+                r = requests.get(url)
+                js = r.json()   
+                
+                city.append(js["city"])
+                pc.append(js["zip_code"])
+                area.append(js["region_name"])
+                country.append(js["country_name"])
+                
+                geo.append(js)
+        else: 
+            pc = date; city = date; area = date; country = date
 
         df = pd.DataFrame({'Date': date, 'Time': time, 's_ip': s_ip,'cs_method':cs_method,'cs_uri_stem': cs_uri_stem, 'cs_uri_query': cs_uri_query,'s_port': s_port,'cs_username': cs_username,'c_ip': c_ip,'cs_User_Agent': cs_User_Agent, 'cs_Cookie': '-' , 'cs_Referer': '-', 'sc_status': sc_status,'sc_substatus': sc_substatus,'sc_win32': sc_win32, 'sc_bytes': '-','cs_bytes': '-' ,'time_taken': time_taken ,
                         'pc': pc, 'city' : city, 'state_area' : area, 'country': country
@@ -376,19 +380,22 @@ def create_excel( file ):
 
         # geolocalizacion
         pc = []; city = []; area = []; country = []
-        geo = []
-        for i in c_ip:
-            ip = i
-            url = 'http://freegeoip.net/json/'+ip
-            r = requests.get(url)
-            js = r.json()   
-            
-            city.append(js["city"])
-            pc.append(js["zip_code"])
-            area.append(js["region_name"])
-            country.append(js["country_name"])
-            
-            geo.append(js)
+        if fgeo: 
+            geo = []
+            for i in c_ip:
+                ip = i
+                url = 'http://freegeoip.net/json/'+ip
+                r = requests.get(url)
+                js = r.json()   
+                
+                city.append(js["city"])
+                pc.append(js["zip_code"])
+                area.append(js["region_name"])
+                country.append(js["country_name"])
+                
+                geo.append(js)
+        else: 
+            pc = date; city = date; area = date; country = date
 
         # read current excel in pandas. 
         df = pd.DataFrame({'Date': date, 'Time': time, 's_ip': s_ip,'cs_method':cs_method,'cs_uri_stem': cs_uri_stem, 'cs_uri_query': cs_uri_query,'s_port': s_port,'cs_username': cs_username,'c_ip': c_ip,'cs_User_Agent': cs_User_Agent, 'cs_cookie': cs_cookie , 'cs_referer': cs_referer, 'sc_status': sc_status,'sc_substatus': sc_substatus,'sc_win32': sc_win32, 'sc_bytes': sc_bytes,'cs_bytes': cs_bytes ,'time_taken': time_taken,
@@ -425,16 +432,17 @@ def create_excel( file ):
 
 def geolocalizacion():
 	print("geo")
-		
+
+
+def read_files(): 
+    files = os.listdir(path)
+    for i in range(len(files)): 
+        print(files[i])
+        if files[i].startswith("u_ex"): 
+            create_excel(files[i])
+    print("end")
 		
 # main    
 if __name__ == '__main__':
-	files = os.listdir(path)
-	
-	for file in files: 
-		create_excel(file)
-    
-    # 
-    # print("end")
-
+    read_files()
 		
