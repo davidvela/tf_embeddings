@@ -432,7 +432,21 @@ def create_excel( file ):
 
 def geolocalizacion():
 	print("geo")
-
+    geo = []
+    pc = []; city = []; area = []; country = []
+    c_ip = []
+    for i in c_ip:
+        ip = i
+        url = 'http://freegeoip.net/json/'+ip
+        r = requests.get(url)
+        js = r.json()   
+        
+        city.append(js["city"])
+        pc.append(js["zip_code"])
+        area.append(js["region_name"])
+        country.append(js["country_name"])
+        
+        geo.append(js)
 
 def read_files(): 
     files = os.listdir(path)
